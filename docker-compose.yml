@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  llm-query-system:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - HACKRX_API_TOKEN=${HACKRX_API_TOKEN}
+      - HOST=0.0.0.0
+      - PORT=8000
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
